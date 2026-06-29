@@ -1,0 +1,65 @@
+/* Live Camera Preview overlay and HUD Styles */
+
+.camera-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  color: #ffffff;
+}
+
+.camera-viewport-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures camera feed takes up entire screen without stretching */
+  display: block;
+}
+
+/* Floating overlay controls */
+.camera-hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let touch drag/clicks pass through to video */
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.camera-hud-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Centered loading or error widgets */
+.camera-status-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  pointer-events: auto;
+  background-color: rgba(0, 0, 0, 0.45);
+}
