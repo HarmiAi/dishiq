@@ -10,7 +10,9 @@ export class SocketService {
   static init(server: http.Server): Server {
     ioInstance = new Server(server, {
       cors: {
-        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        origin: process.env.NODE_ENV === 'production' 
+          ? (process.env.FRONTEND_URL || '') 
+          : [process.env.FRONTEND_URL || '', 'http://localhost:3000'],
         methods: ['GET', 'POST'],
         credentials: true
       }

@@ -67,8 +67,10 @@ export const createTable = async (
       return;
     }
 
-    // Generate menu order link
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (!frontendUrl) {
+      throw new Error('FRONTEND_URL is not defined in environment variables');
+    }
     const orderLink = `${frontendUrl}/r/${restaurant.slug}?table=${tableNumber}`;
     
     // Dynamic QR code generation API
@@ -137,7 +139,10 @@ export const updateTable = async (
       // Update QR Code
       const restaurant = await Restaurant.findById(req.user.restaurantId);
       if (restaurant) {
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        const frontendUrl = process.env.FRONTEND_URL;
+        if (!frontendUrl) {
+          throw new Error('FRONTEND_URL is not defined in environment variables');
+        }
         const orderLink = `${frontendUrl}/r/${restaurant.slug}?table=${tableNumber}`;
         table.qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(orderLink)}`;
       }

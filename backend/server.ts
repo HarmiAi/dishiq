@@ -38,10 +38,10 @@ app.use(helmet({
 
 // CORS Configuration
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
+  process.env.NODE_ENV !== 'production' && 'http://localhost:3000',
+  process.env.NODE_ENV !== 'production' && 'http://localhost:3001',
   process.env.FRONTEND_URL || ''
-].filter(Boolean);
+].filter((origin): origin is string => typeof origin === 'string' && origin !== '');
 
 app.use(
   cors({

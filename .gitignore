@@ -1,0 +1,21 @@
+# dependencies
+**/node_modules/
+
+# build outputs
+backend/dist/
+frontend/.next/
+frontend/out/
+frontend/build/
+*.tsbuildinfo
+
+# environment configurations
+**/.env
+**/.env.local
+**/.env.development
+**/.env.test
+**/.env.production
+**/..env
+
+# system files
+.DS_Store
+Thumbs.db
