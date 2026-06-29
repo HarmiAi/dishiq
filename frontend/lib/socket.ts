@@ -1,7 +1,9 @@
 import { io, Socket } from 'socket.io-client';
 
-// Resolve backend Socket server URL (fallback to localhost:5000 in dev)
-const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+let SOCKET_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+if (SOCKET_URL.endsWith('/api')) {
+  SOCKET_URL = SOCKET_URL.slice(0, -4);
+}
 
 let socketInstance: Socket | null = null;
 
