@@ -400,16 +400,14 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
                         >
                           👁 View in 3D
                         </button>
-                        {isARSupported && (
-                          <button
-                            onClick={() => router.push(`/ar?slug=${slug}&items=${item._id}${tableNumber ? `&table=${tableNumber}` : ''}`)}
-                            className="clay-btn clay-btn-secondary"
-                            style={{ width: '100%', padding: '8px 12px', fontSize: '0.82rem', height: '38px', borderRadius: '12px' }}
-                            title="View in Live AR Camera Preview"
-                          >
-                            📷 View in AR
-                          </button>
-                        )}
+                        <button
+                          onClick={() => setSelectedARItem(item)}
+                          className="clay-btn clay-btn-secondary"
+                          style={{ width: '100%', padding: '8px 12px', fontSize: '0.82rem', height: '38px', borderRadius: '12px' }}
+                          title="View in Live AR Camera Preview"
+                        >
+                          📷 View in AR
+                        </button>
                       </div>
                     );
                   };
