@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Home() {
   return (
     <div style={heroContainerStyle}>
-      <header style={headerStyle}>
+      <header style={headerStyle} className="hero-header">
         <div style={logoStyle}>Dishiq</div>
         <div style={navLinksStyle}>
           <Link href="/login" className="clay-btn clay-btn-secondary" style={navBtnStyle}>
@@ -18,12 +18,12 @@ export default function Home() {
         </div>
       </header>
 
-      <main style={mainContentStyle}>
-        <div style={taglineWrapperStyle} className="float-animation">
+      <main style={mainContentStyle} className="hero-main-grid">
+        <div style={taglineWrapperStyle} className="tagline-wrapper float-animation">
           <span className="clay-badge clay-badge-info" style={{ marginBottom: '16px' }}>
             Phase 1 Foundation MVP
           </span>
-          <h1 style={heroTitleStyle}>
+          <h1 style={heroTitleStyle} className="hero-title">
             The 3D Restaurant <br />
             <span style={gradientTextStyle}>SaaS Engine</span>
           </h1>
@@ -31,7 +31,7 @@ export default function Home() {
             Dishiq powers digital menus, live table tracking, and contactless ordering for modern eateries. 
             Scale from a single table to multi-restaurant chains with robust, claymorphic SaaS tools.
           </p>
-          <div style={ctaGroupStyle}>
+          <div style={ctaGroupStyle} className="cta-group">
             <Link href="/register" className="clay-btn clay-btn-primary" style={largeBtnStyle}>
               Create Your Menu 🚀
             </Link>
@@ -42,7 +42,7 @@ export default function Home() {
         </div>
 
         {/* 3D Visual Accents */}
-        <div style={visualContainerStyle}>
+        <div style={visualContainerStyle} className="visual-container">
           <div style={clayTabletStyle}>
             <div style={tabletHeaderStyle}>
               <div style={dotStyle}></div>

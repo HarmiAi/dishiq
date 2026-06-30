@@ -14,6 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const toast = useToast();
   const [isAvailable, setIsAvailable] = useState(true);
   const [isToggling, setIsToggling] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -68,9 +69,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div style={layoutContainerStyle}>
+    <div style={layoutContainerStyle} className="responsive-dashboard-container">
+      {/* Mobile Sidebar backdrop */}
+      {isMobileSidebarOpen && (
+        <div 
+          style={mobileSidebarBackdropStyle} 
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar Navigation */}
-      <aside style={sidebarStyle} className="clay-card">
+      <aside style={sidebarStyle} className={`clay-card dashboard-sidebar ${isMobileSidebarOpen ? 'open' : ''}`}>
         <div style={logoWrapperStyle}>
           <Link href="/dashboard" style={logoStyle}>Dishiq</Link>
           <span style={logoBadgeStyle}>SaaS</span>
@@ -84,6 +93,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 key={item.path}
                 href={item.path}
                 style={isActive ? activeNavLinkStyle : navLinkStyle}
+                onClick={() => setIsMobileSidebarOpen(false)}
               >
                 <span style={navIconStyle}>{item.icon}</span>
                 <span style={{ fontWeight: isActive ? 600 : 500 }}>{item.name}</span>
@@ -116,10 +126,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Panel */}
       <div style={mainAreaStyle}>
-        <header style={headerStyle} className="clay-card">
-          <div>
-            <h2 style={restaurantNameStyle}>{restaurant?.name || 'My Restaurant'}</h2>
-            <span style={restaurantSlugStyle}>r/{restaurant?.slug}</span>
+        <header style={headerStyle} className="clay-card dashboard-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button 
+              className="menu-toggle-btn"
+              onClick={() => setIsMobileSidebarOpen(true)}
+            >
+              ☰
+            </button>
+            <div>
+              <h2 style={restaurantNameStyle}>{restaurant?.name || 'My Restaurant'}</h2>
+              <span style={restaurantSlugStyle}>r/{restaurant?.slug}</span>
+            </div>
           </div>
 
           <div style={headerActionsStyle}>
@@ -357,4 +375,14 @@ const contentContainerStyle: React.CSSProperties = {
   flexGrow: 1,
   display: 'flex',
   flexDirection: 'column'
+};
+
+const mobileSidebarBackdropStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.6)',
+  zIndex: 999
 };

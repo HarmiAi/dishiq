@@ -319,8 +319,8 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
       {/* Cover Hero Banner */}
       <div style={heroCoverStyle}>
         <div style={heroOverlayStyle}>
-          <div style={heroInfoCardStyle} className="clay-card float-animation">
-            <div style={heroMetaRowStyle}>
+          <div style={heroInfoCardStyle} className="clay-card float-animation restaurant-hero-info">
+            <div style={heroMetaRowStyle} className="restaurant-hero-meta">
               <div style={logoWrapperStyle}>
                 {restaurant.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -341,7 +341,7 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
               </div>
             )}
 
-            <div style={addressRowStyle}>
+            <div style={addressRowStyle} className="restaurant-address-row">
               <span>📍 {restaurant.address || 'Dining Location'}</span>
               <span>📞 {restaurant.phone || 'Contact Number'}</span>
             </div>
@@ -350,7 +350,7 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
       </div>
 
       {/* Sticky Categories Bar */}
-      <div style={stickyNavBarStyle}>
+      <div style={stickyNavBarStyle} className="category-nav-bar no-scrollbar">
         {categories.map((cat: any) => {
           const isActive = activeCategory === cat._id;
           return (

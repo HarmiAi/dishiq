@@ -185,9 +185,9 @@ export default function SettingsPage() {
         <p style={subtitleStyle}>Configure restaurant profile, working hours, and QR ordering details.</p>
       </div>
 
-      <div style={layoutGridStyle}>
+      <div style={layoutGridStyle} className="responsive-settings-grid">
         {/* Tab Selection */}
-        <div style={tabsColumnStyle}>
+        <div style={tabsColumnStyle} className="tabs-column-responsive no-scrollbar">
           <button
             onClick={() => setActiveTab('profile')}
             style={activeTab === 'profile' ? activeTabButtonStyle : tabButtonStyle}

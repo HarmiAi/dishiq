@@ -127,7 +127,7 @@ export default function CustomersCRMPage() {
       </div>
 
       {/* Main Grid: directory list on the left, slide drawer context on the right (if selected) */}
-      <div style={crmLayoutGridStyle(!!selectedCustomerId)}>
+      <div style={crmLayoutGridStyle(!!selectedCustomerId)} className="responsive-split-grid">
         
         {/* Left: Customer directory list */}
         <div className="clay-card" style={{ padding: 0, overflowX: 'auto', border: '1px solid rgba(255,255,255,0.04)' }}>

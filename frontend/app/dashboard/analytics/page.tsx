@@ -285,7 +285,7 @@ export default function AnalyticsDashboardPage() {
       </div>
 
       {/* Two-column layout */}
-      <div style={gridStyle}>
+      <div style={gridStyle} className="responsive-split-grid">
         
         {/* Left Column: Charts */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

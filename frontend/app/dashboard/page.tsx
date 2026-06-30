@@ -120,7 +120,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Split Actions & Orders Layout Grid */}
-      <div style={splitLayoutGridStyle}>
+      <div style={splitLayoutGridStyle} className="responsive-split-grid">
         {/* Quick Actions Panel */}
         <div className="clay-card" style={actionsPanelStyle}>
           <h2 style={panelTitleStyle}>Quick Settings</h2>
