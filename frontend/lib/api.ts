@@ -1,6 +1,15 @@
 import axios from 'axios';
 
-let API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+let API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL) {
+  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+    API_URL = 'https://dishiq-zabl.onrender.com';
+  } else {
+    API_URL = 'http://localhost:5000';
+  }
+}
+
 if (!API_URL.endsWith('/api')) {
   API_URL = `${API_URL}/api`;
 }

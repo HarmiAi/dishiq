@@ -8,11 +8,14 @@ export class SocketService {
    * Initialize Socket.IO server on top of HTTP server
    */
   static init(server: http.Server): Server {
+    const allowedOrigins = (process.env.FRONTEND_URL || '')
+      .split(',')
+      .map(origin => origin.trim())
+      .filter(Boolean);
+
     ioInstance = new Server(server, {
       cors: {
-        origin: process.env.NODE_ENV === 'production' 
-          ? (process.env.FRONTEND_URL || '') 
-          : [process.env.FRONTEND_URL || '', 'http://localhost:3000'],
+        origin: allowedOrigins,
         methods: ['GET', 'POST'],
         credentials: true
       }
