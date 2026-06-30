@@ -26,7 +26,7 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
   const [errorMsg, setErrorMsg] = useState('');
   const [permissionState, setPermissionState] = useState<'prompt' | 'granted' | 'denied'>('prompt');
 
-  const startCamera = async () => {
+  const startCamera = async (activeRef?: { current: boolean }) => {
     setLoading(true);
     setErrorMsg('');
     
@@ -59,6 +59,14 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
       }
     }
 
+    // If the component unmounted while getUserMedia was pending, discard stream
+    if (activeRef && !activeRef.current) {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+      return;
+    }
+
     if (stream) {
       streamRef.current = stream;
       setPermissionState('granted');
@@ -66,7 +74,9 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
         videoRef.current.srcObject = stream;
         // Play video
         videoRef.current.play().catch((playErr) => {
-          console.error('Error starting video play:', playErr);
+          if (playErr.name !== 'AbortError') {
+            console.error('Error starting video play:', playErr);
+          }
         });
       }
       setLoading(false);
@@ -100,8 +110,10 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
   };
 
   useEffect(() => {
-    startCamera();
+    const activeRef = { current: true };
+    startCamera(activeRef);
     return () => {
+      activeRef.current = false;
       stopCamera();
     };
   }, []);
@@ -121,7 +133,6 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
           className="camera-video"
           playsInline
           muted
-          autoPlay
         />
 
         {/* HUD Overlay controls */}
@@ -164,7 +175,7 @@ export const CameraViewer: React.FC<CameraViewerProps> = ({ item, onClose }) => 
               </p>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button 
-                  onClick={startCamera} 
+                  onClick={() => startCamera()} 
                   className="clay-btn clay-btn-primary" 
                   style={{ flex: 1, padding: '10px', fontSize: '0.85rem' }}
                 >
