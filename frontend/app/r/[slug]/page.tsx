@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, use, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
+import api, { resolveAssetUrl } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { ModelViewer } from '@/components/ModelViewer';
@@ -39,6 +39,26 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
   const [checkoutError, setCheckoutError] = useState('');
   const [selected3DItem, setSelected3DItem] = useState<any>(null);
   const [selectedARItem, setSelectedARItem] = useState<any>(null);
+  const [isARSupported, setIsARSupported] = useState(false);
+
+  useEffect(() => {
+    const checkARSupport = async () => {
+      if (typeof window === 'undefined') return;
+      const a = document.createElement('a');
+      const supportsQuickLook = !!(a.relList && a.relList.supports && a.relList.supports('ar'));
+      let supportsWebXR = false;
+      if (navigator.xr) {
+        try {
+          supportsWebXR = await navigator.xr.isSessionSupported('immersive-ar');
+        } catch (e) {
+          // ignore
+        }
+      }
+      const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+      setIsARSupported(supportsQuickLook || supportsWebXR || isMobile);
+    };
+    checkARSupport();
+  }, []);
 
   // References for category section scrolling
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
@@ -304,7 +324,7 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
               <div style={logoWrapperStyle}>
                 {restaurant.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={restaurant.logoUrl} alt={restaurant.name} style={logoStyle} />
+                  <img src={resolveAssetUrl(restaurant.logoUrl)} alt={restaurant.name} style={logoStyle} />
                 ) : (
                   <span style={{ fontSize: '1.5rem' }}>🍽️</span>
                 )}
@@ -380,14 +400,16 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
                         >
                           👁 View in 3D
                         </button>
-                        <button
-                          onClick={() => setSelectedARItem(item)}
-                          className="clay-btn clay-btn-secondary"
-                          style={{ width: '100%', padding: '8px 12px', fontSize: '0.82rem', height: '38px', borderRadius: '12px' }}
-                          title="View in Live AR Camera Preview"
-                        >
-                          📷 View in AR
-                        </button>
+                        {isARSupported && (
+                          <button
+                            onClick={() => router.push(`/ar?slug=${slug}&items=${item._id}${tableNumber ? `&table=${tableNumber}` : ''}`)}
+                            className="clay-btn clay-btn-secondary"
+                            style={{ width: '100%', padding: '8px 12px', fontSize: '0.82rem', height: '38px', borderRadius: '12px' }}
+                            title="View in Live AR Camera Preview"
+                          >
+                            📷 View in AR
+                          </button>
+                        )}
                       </div>
                     );
                   };
@@ -397,7 +419,7 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
                       <div style={foodImageWrapperStyle}>
                         {item.imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={item.imageUrl} alt={item.name} style={foodImageStyle} />
+                          <img src={resolveAssetUrl(item.imageUrl)} alt={item.name} style={foodImageStyle} />
                         ) : (
                           <span style={{ fontSize: '2rem' }}>🥗</span>
                         )}
@@ -636,7 +658,7 @@ export default function PublicMenuPage({ params, searchParams }: PageProps) {
                           <div style={cartThumbStyle}>
                             {menuItem.imageUrl ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img src={menuItem.imageUrl} alt={menuItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <img src={resolveAssetUrl(menuItem.imageUrl)} alt={menuItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             ) : (
                               <span>🥗</span>
                             )}

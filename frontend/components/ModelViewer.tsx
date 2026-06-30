@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { loadGLB } from '../lib/GLBLoader';
+import { resolveAssetUrl } from '../lib/api';
 import { useToast } from '@/hooks/useToast';
 import { motion } from 'framer-motion';
 import '../styles/model-viewer.css';
@@ -168,7 +169,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ item, onClose, onAddTo
     let modelGroup: THREE.Group | null = null;
     
     const cancelLoad = loadGLB(
-      item.modelUrl || '',
+      resolveAssetUrl(item.modelUrl) || '',
       (loadedScene) => {
         modelGroup = loadedScene;
 
@@ -360,7 +361,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({ item, onClose, onAddTo
             <div className="viewer-image-wrapper">
               {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={item.imageUrl} alt={item.name} className="viewer-dish-img" />
+                <img src={resolveAssetUrl(item.imageUrl)} alt={item.name} className="viewer-dish-img" />
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: '#1f2937' }}>
                   <span style={{ fontSize: '3rem' }}>🥗</span>

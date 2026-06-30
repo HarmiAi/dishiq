@@ -1,18 +1,31 @@
 import axios from 'axios';
 
-let API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-if (!API_URL) {
-  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
-    API_URL = 'https://dishiq-zabl.onrender.com';
-  } else {
-    API_URL = 'http://localhost:5000';
-  }
-}
+let API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 if (!API_URL.endsWith('/api')) {
   API_URL = `${API_URL}/api`;
 }
+
+/**
+ * Resolves local file paths (e.g. /uploads/filename.ext) relative to the active backend API host.
+ * Cloudinary image URLs are returned as-is.
+ */
+export const resolveAssetUrl = (url?: string): string => {
+  if (!url) return '';
+  if (url.includes('res.cloudinary.com')) {
+    return url;
+  }
+  const uploadsMatch = url.match(/\/uploads\/(.+)$/);
+  if (uploadsMatch) {
+    const filename = uploadsMatch[1];
+    let baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    if (baseUrl.endsWith('/api')) {
+      baseUrl = baseUrl.slice(0, -4);
+    }
+    return `${baseUrl}/uploads/${filename}`;
+  }
+  return url;
+};
 
 const api = axios.create({
   baseURL: API_URL,

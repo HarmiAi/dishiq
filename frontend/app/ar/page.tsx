@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
+import api, { resolveAssetUrl } from '@/lib/api';
 import { useToast } from '@/hooks/useToast';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -135,7 +135,7 @@ function ARContent() {
   // Initialize Desktop 3D Viewer if running in desktop/fallback mode
   useEffect(() => {
     if (isDesktop && menuItem && menuItem.modelUrl) {
-      initThreeDesktop(menuItem.modelUrl, menuItem.modelScale || 1.0);
+      initThreeDesktop(resolveAssetUrl(menuItem.modelUrl), menuItem.modelScale || 1.0);
     }
     return () => {
       disposeThree();
@@ -400,7 +400,7 @@ function ARContent() {
       scene.add(reticle);
       reticleRef.current = reticle;
 
-      await loadModelToScene(menuItem.modelUrl, menuItem.modelScale || 1.0, scene, true);
+      await loadModelToScene(resolveAssetUrl(menuItem.modelUrl), menuItem.modelScale || 1.0, scene, true);
 
       const sessionInit = {
         requiredFeatures: ['hit-test', 'local-floor', 'dom-overlay'],
@@ -760,7 +760,7 @@ function ARContent() {
             <div className="clay-card" style={{ padding: '0', overflow: 'hidden', height: '180px', position: 'relative' }}>
               {menuItem.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={menuItem.imageUrl} alt={menuItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={resolveAssetUrl(menuItem.imageUrl)} alt={menuItem.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: '#1f2937' }}>
                   <span style={{ fontSize: '3rem' }}>🥗</span>
@@ -834,7 +834,7 @@ function ARContent() {
               {menuItem.imageUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img 
-                  src={menuItem.imageUrl} 
+                  src={resolveAssetUrl(menuItem.imageUrl)} 
                   alt={menuItem.name} 
                   style={{ width: '80px', height: '80px', borderRadius: '16px', objectFit: 'cover', margin: '0 auto 20px', display: 'block', border: '1px solid var(--border-color)' }} 
                 />
